@@ -1,0 +1,162 @@
+
+Discarded input sections
+
+ .text          0x00000000        0x0 /tmp/ccLawtYj.o
+ .data          0x00000000        0x0 /tmp/ccLawtYj.o
+ .bss           0x00000000        0x0 /tmp/ccLawtYj.o
+ .group         0x00000000        0xc /tmp/ccodMZZ1.o
+ .group         0x00000000        0xc /tmp/ccodMZZ1.o
+ .group         0x00000000        0xc /tmp/ccodMZZ1.o
+ .group         0x00000000        0xc /tmp/ccodMZZ1.o
+ .group         0x00000000        0xc /tmp/ccodMZZ1.o
+ .group         0x00000000        0xc /tmp/ccodMZZ1.o
+ .group         0x00000000        0xc /tmp/ccodMZZ1.o
+ .group         0x00000000        0xc /tmp/ccodMZZ1.o
+ .group         0x00000000        0xc /tmp/ccodMZZ1.o
+ .group         0x00000000        0xc /tmp/ccodMZZ1.o
+ .group         0x00000000        0xc /tmp/ccodMZZ1.o
+ .group         0x00000000        0xc /tmp/ccodMZZ1.o
+ .text          0x00000000        0x0 /tmp/ccodMZZ1.o
+ .data          0x00000000        0x0 /tmp/ccodMZZ1.o
+ .bss           0x00000000        0x0 /tmp/ccodMZZ1.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x08000000         0x00200000         xr
+DTCMRAM          0x20000000         0x00020000         xrw
+RAM              0x24000000         0x00080000         xrw
+SRAM1            0x30000000         0x00020000         rw
+SRAM2            0x30020000         0x00020000         rw
+SRAM4            0x38000000         0x00010000         rw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD /tmp/ccLawtYj.o
+LOAD /tmp/ccodMZZ1.o
+START GROUP
+LOAD /usr/lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+dp/hard/libgcc.a
+LOAD /usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg.a
+LOAD /usr/lib/gcc/arm-none-eabi/14.2.1/../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libc.a
+END GROUP
+                0x20020000                        _estack = (ORIGIN (DTCMRAM) + LENGTH (DTCMRAM))
+
+.isr_vector     0x08000000       0x40
+ *(.isr_vector)
+ .isr_vector    0x08000000       0x40 /tmp/ccLawtYj.o
+
+.text           0x08000040       0xe8
+ *(.text*)
+ .text.Reset_Handler
+                0x08000040       0x40 /tmp/ccLawtYj.o
+                0x08000040                Reset_Handler
+ .text.Default_Handler
+                0x08000080        0x4 /tmp/ccLawtYj.o
+                0x08000080                Default_Handler
+ .text.delay    0x08000084       0x22 /tmp/ccodMZZ1.o
+                0x08000084                delay
+ *fill*         0x080000a6        0x2 
+ .text.main     0x080000a8       0x80 /tmp/ccodMZZ1.o
+                0x080000a8                main
+ *(.rodata*)
+                0x08000128                        _sidata = LOADADDR (.data)
+
+.glue_7         0x08000128        0x0
+ .glue_7        0x08000128        0x0 linker stubs
+
+.glue_7t        0x08000128        0x0
+ .glue_7t       0x08000128        0x0 linker stubs
+
+.vfp11_veneer   0x08000128        0x0
+ .vfp11_veneer  0x08000128        0x0 linker stubs
+
+.v4_bx          0x08000128        0x0
+ .v4_bx         0x08000128        0x0 linker stubs
+
+.iplt           0x08000128        0x0
+ .iplt          0x08000128        0x0 /tmp/ccLawtYj.o
+
+.rel.dyn        0x08000128        0x0
+ .rel.iplt      0x08000128        0x0 /tmp/ccLawtYj.o
+
+.data           0x24000000        0x0 load address 0x08000128
+                0x24000000                        _sdata = .
+ *(.data*)
+                0x24000000                        _edata = .
+
+.igot.plt       0x24000000        0x0 load address 0x08000128
+ .igot.plt      0x24000000        0x0 /tmp/ccLawtYj.o
+
+.bss            0x24000000        0x0 load address 0x08000128
+                0x24000000                        _sbss = .
+ *(.bss*)
+ *(COMMON)
+                0x24000000                        _ebss = .
+OUTPUT(template.elf elf32-littlearm)
+LOAD linker stubs
+
+.ARM.attributes
+                0x00000000       0x33
+ .ARM.attributes
+                0x00000000       0x21 /tmp/ccLawtYj.o
+ .ARM.attributes
+                0x00000021       0x32 /tmp/ccodMZZ1.o
+
+.comment        0x00000000       0x26
+ .comment       0x00000000       0x26 /tmp/ccodMZZ1.o
+                                 0x27 (size before relaxing)
+
+.debug_line     0x00000000      0x20c
+ .debug_line    0x00000000       0x72 /tmp/ccLawtYj.o
+ .debug_line    0x00000072      0x19a /tmp/ccodMZZ1.o
+
+.debug_line_str
+                0x00000000       0x44
+ .debug_line_str
+                0x00000000       0x44 /tmp/ccLawtYj.o
+
+.debug_info     0x00000000      0x509
+ .debug_info    0x00000000       0x23 /tmp/ccLawtYj.o
+ .debug_info    0x00000023      0x4e6 /tmp/ccodMZZ1.o
+
+.debug_abbrev   0x00000000      0x110
+ .debug_abbrev  0x00000000       0x12 /tmp/ccLawtYj.o
+ .debug_abbrev  0x00000012       0xfe /tmp/ccodMZZ1.o
+
+.debug_aranges  0x00000000       0x50
+ .debug_aranges
+                0x00000000       0x28 /tmp/ccLawtYj.o
+ .debug_aranges
+                0x00000028       0x28 /tmp/ccodMZZ1.o
+
+.debug_str      0x00000000    0xe9e7d
+ .debug_str     0x00000000    0xe9e7d /tmp/ccLawtYj.o
+                                 0x53 (size before relaxing)
+ .debug_str     0x000e9e7d        0x0 /tmp/ccodMZZ1.o
+                              0xea058 (size before relaxing)
+
+.debug_rnglists
+                0x00000000       0x33
+ .debug_rnglists
+                0x00000000       0x19 /tmp/ccLawtYj.o
+ .debug_rnglists
+                0x00000019       0x1a /tmp/ccodMZZ1.o
+
+.debug_macro    0x00000000    0x28bd2
+ .debug_macro   0x00000000       0x99 /tmp/ccodMZZ1.o
+ .debug_macro   0x00000099      0xaf0 /tmp/ccodMZZ1.o
+ .debug_macro   0x00000b89      0x34e /tmp/ccodMZZ1.o
+ .debug_macro   0x00000ed7       0x3b /tmp/ccodMZZ1.o
+ .debug_macro   0x00000f12       0x2e /tmp/ccodMZZ1.o
+ .debug_macro   0x00000f40       0x10 /tmp/ccodMZZ1.o
+ .debug_macro   0x00000f50       0x58 /tmp/ccodMZZ1.o
+ .debug_macro   0x00000fa8      0x26d /tmp/ccodMZZ1.o
+ .debug_macro   0x00001215       0x28 /tmp/ccodMZZ1.o
+ .debug_macro   0x0000123d     0x1670 /tmp/ccodMZZ1.o
+ .debug_macro   0x000028ad      0x11f /tmp/ccodMZZ1.o
+ .debug_macro   0x000029cc       0x22 /tmp/ccodMZZ1.o
+ .debug_macro   0x000029ee    0x261e4 /tmp/ccodMZZ1.o
+
+.debug_frame    0x00000000       0x54
+ .debug_frame   0x00000000       0x54 /tmp/ccodMZZ1.o
