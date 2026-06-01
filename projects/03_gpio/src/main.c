@@ -1,3 +1,21 @@
+/*
+ * Project: 03_gpio
+ * Date: 2026-05-31
+ *
+ * What I learned:
+ * - struct arrays to describe hardware
+ * - for loops for GPIO init using pin * 2 formula
+ * - BSRR is atomic, ODR is not
+ * - uint8_t cannot go negative in countdown loops
+ *
+ * Registers used:
+ * - RCC_AHB4ENR  bits 1,4 for GPIOB, GPIOE
+ * - GPIOx_MODER  2 bits per pin
+ * - GPIOx_OTYPER   1 bit per pin
+ * - GPIOx_PUPDR    2 bits per pin
+ * - GPIOx_BSRR   set=bit n, reset=bit n+16
+ */
+
 #include <stdint.h>
 #include "stm32h753xx.h"
 
