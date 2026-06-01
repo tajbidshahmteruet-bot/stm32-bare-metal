@@ -1,0 +1,9 @@
+# Build outputs
+*.elf
+*.bin
+*.map
+*.o
+
+# Temporary files
+*.zip
+temp-*/
