@@ -5,7 +5,6 @@
 
 .global Reset_Handler
 .global Default_Handler
-.global SysTick_Handler 
 
 /* ── Interrupt Vector Table ─────────────────────────────────── */
 .section .isr_vector, "a", %progbits
@@ -24,7 +23,7 @@
 .word   Default_Handler         /* DebugMon */
 .word   0                       /* Reserved */
 .word   Default_Handler         /* PendSV */
-.word   SysTick_Handler        /* SysTick */
+.word   Default_Handler         /* SysTick */
 
 /* ── Reset Handler ──────────────────────────────────────────── */
 .section .text.Reset_Handler

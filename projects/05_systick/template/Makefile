@@ -10,7 +10,6 @@ SIZE    = arm-none-eabi-size
 # ── Paths ─────────────────────────────────────────────────────
 WORKSPACE = ..
 CMSIS_DIR = $(WORKSPACE)/cmsis
-COMMON_DIR = $(WORKSPACE)/common # For custom made libraries
 
 STARTUP = startup/startup_stm32h753zi.s
 LINKER  = linker/STM32H753ZI.ld
@@ -24,7 +23,6 @@ CFLAGS += -O0 -g3
 CFLAGS += -Wall -Wextra -Wno-unused-parameter
 CFLAGS += -fdata-sections -ffunction-sections
 CFLAGS += -std=c11
-CFLAGS += -I$(COMMON_DIR)/include 
 
 LDFLAGS  = -T$(LINKER)
 LDFLAGS += -nostartfiles

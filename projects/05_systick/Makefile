@@ -1,6 +1,6 @@
 # ── Change these per project ──────────────────────────────────
-TARGET = template
-SRCS   = src/main.c src/syscalls.c
+TARGET = systick
+SRCS = src/main.c src/syscalls.c $(COMMON_DIR)/src/usart3.c
 
 # ── Toolchain ─────────────────────────────────────────────────
 CC      = arm-none-eabi-gcc
@@ -8,9 +8,9 @@ OBJCOPY = arm-none-eabi-objcopy
 SIZE    = arm-none-eabi-size
 
 # ── Paths ─────────────────────────────────────────────────────
-WORKSPACE = ..
+WORKSPACE = ../..
 CMSIS_DIR = $(WORKSPACE)/cmsis
-COMMON_DIR = $(WORKSPACE)/common # For custom made libraries
+COMMON_DIR = $(WORKSPACE)/common
 
 STARTUP = startup/startup_stm32h753zi.s
 LINKER  = linker/STM32H753ZI.ld
@@ -24,7 +24,7 @@ CFLAGS += -O0 -g3
 CFLAGS += -Wall -Wextra -Wno-unused-parameter
 CFLAGS += -fdata-sections -ffunction-sections
 CFLAGS += -std=c11
-CFLAGS += -I$(COMMON_DIR)/include 
+CFLAGS += -I$(COMMON_DIR)/include
 
 LDFLAGS  = -T$(LINKER)
 LDFLAGS += -nostartfiles
