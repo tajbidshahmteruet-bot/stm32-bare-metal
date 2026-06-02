@@ -41,4 +41,5 @@ SECTIONS
         *(COMMON)
         _ebss = .;
     } > RAM
+    _end = .;
 }

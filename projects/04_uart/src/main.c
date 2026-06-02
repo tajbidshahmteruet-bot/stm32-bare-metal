@@ -1,5 +1,8 @@
 #include <stdint.h>
 #include "stm32h753xx.h"
+#include <stdio.h>
+#include <errno.h>
+#include <sys/types.h>
 
 void usart3_init(void){ /* Usart Initialization */ 
     /* 1. Enabling the Clocks */
@@ -45,13 +48,27 @@ void usart3_send_string(const char *str){
     }
 
 }
+int _write(int file, char *ptr, int len){
+    (void)file;
+    for (int i = 0; i < len; i++){
+        usart3_send_char(ptr[i]);
+    
+    }
+    return len;
+
+}
 
 int main(void) {
     usart3_init();
-    usart3_send_string("Hello from STM32H753ZI!...\r\n");
+    //usart3_send_string("Hello from STM32H753ZI!...\r\n");
+    printf("Hello from STM32H753ZI!\r\n");
+    printf("Bare Metal printf() working!\r\n");
+
+    uint32_t counter = 0;
     while (1) {
-        usart3_send_string("Bare metal UART running...\r\n");
-        for (int i = 0; i < 1000000; ++i);
+        //usart3_send_string("Bare metal UART running...\r\n");
+        printf("Counter: %lu\r\n", counter++);
+        for (volatile uint32_t i = 0; i < 1000000; ++i);
 
     }
 }

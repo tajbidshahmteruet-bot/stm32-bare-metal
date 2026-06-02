@@ -1,6 +1,6 @@
 # ── Change these per project ──────────────────────────────────
 TARGET = template
-SRCS   = src/main.c
+SRCS   = src/main.c src/syscalls.c
 
 # ── Toolchain ─────────────────────────────────────────────────
 CC      = arm-none-eabi-gcc
@@ -29,6 +29,7 @@ LDFLAGS += -nostartfiles
 LDFLAGS += -Wl,--gc-sections
 LDFLAGS += -Wl,-Map=$(TARGET).map
 LDFLAGS += -Wl,--print-memory-usage
+LDFLAGS += --specs=nano.specs
 
 # ── Build ─────────────────────────────────────────────────────
 ALL_SRCS = $(STARTUP) $(SRCS)
