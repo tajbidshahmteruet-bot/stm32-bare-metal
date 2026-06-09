@@ -14,7 +14,7 @@ int main(void) {
     /* PB0 as output (LED) */
     GPIOB->MODER &= ~(0x3U << 0);
     GPIOB->MODER |=  (0x1U << 0);
-    GPIOB->OTYPER &= ~(1U << 0);
+    GPIOB->OTYPER &= ~(1U << 0); // Output push pull
     GPIOB->PUPDR  &= ~(0x3U << 0);
 
     /* PC13 as input, no pull needed (external pull-up on board) */
