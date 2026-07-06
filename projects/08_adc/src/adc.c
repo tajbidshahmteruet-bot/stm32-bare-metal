@@ -2,9 +2,9 @@
 #include "systick.h"
 #include "stm32h753xx.h"
 
-void adc_init(void) {
+void adc_init(uint8_t channel) {
 
-    // Ensure D3 domain is in RUN mode
+    // Ensure D3 domain is in RUN mode as without this RCC_AHB1ENR_ADC12EN; cannot be enabled
     PWR->CPUCR &= ~PWR_CPUCR_PDDS_D3;
     while (!(PWR->D3CR & PWR_D3CR_VOSRDY));
     // ── 1. Bus clocks ─────────────────────────────────────────
@@ -13,13 +13,6 @@ void adc_init(void) {
 
     RCC->AHB1ENR |= RCC_AHB1ENR_ADC12EN;
     (void)RCC->AHB1ENR;                      // clock propagation barrier
-    // Enable SYSCFG clock
-    //RCC->APB4ENR |= RCC_APB4ENR_SYSCFGEN;
-    //(void)RCC->APB4ENR;
-
-    // Enable analog switch for PA3 (slow channel path)
-    // SYSCFG_PMCR: PA3SO bit closes the switch between PA3 and ADC input
-    //SYSCFG->PMCR |= SYSCFG_PMCR_PA3SO;
 
     // ── 2. PA3 → analog mode, no pull ────────────────────────
     GPIOA->MODER  |=  (0x3U << (3 * 2));     // bits [7:6] = 11 → analog
@@ -52,10 +45,15 @@ void adc_init(void) {
     ADC1->ISR |= ADC_ISR_ADRDY;
 
     // ── 9. Channel 15 (PA3), sampling time 64.5 cycles ───────
-    ADC1->SQR1  = (15U << 6);
-    ADC1->SMPR2 = (0b011U << 15);
-    // H7 specific: enable channel 15 in PCSEL register
-    ADC1->PCSEL |= (1U << 15);
+    ADC1->SQR1  = ((uint32_t)channel << 6); // SQ1 = channel
+    if(channel<=9){
+        ADC1->SMPR1 = (0b011U << (3 * channel));
+    }
+    else{
+        ADC1->SMPR2 = (0b011U << (3 * (channel - 10)));
+    }
+    // H7 specific: enable channel 15 in PCSEL register without this the ADC read does not start
+    ADC1->PCSEL |= (1U << channel);
 }
 
 uint32_t adc_read(void) {

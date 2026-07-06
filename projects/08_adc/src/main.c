@@ -10,7 +10,7 @@ void EXTI15_10_IRQHandler(void) { while(1); }
 int main(void) {
     systick_init();
     usart3_init();
-    adc_init();
+    adc_init(10);
 
     while (1) {
         uint32_t min = 65535, max = 0;
