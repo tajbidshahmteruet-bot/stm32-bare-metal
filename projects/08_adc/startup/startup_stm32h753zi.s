@@ -6,14 +6,15 @@
 .global Reset_Handler
 .global Default_Handler
 .global SysTick_Handler
-.global EXTI15_10_IRQHandler 
+.global EXTI15_10_IRQHandler
+.global HardFault_Handler
 
 /* ── Interrupt Vector Table ─────────────────────────────────── */
 .section .isr_vector, "a", %progbits
 .word   _estack                     /* Stack top */
 .word   Reset_Handler               /* Reset */
 .word   Default_Handler             /* NMI */
-.word   Default_Handler             /* HardFault */
+.word   HardFault_Handler             /* HardFault */
 .word   Default_Handler             /* MemManage */
 .word   Default_Handler             /* BusFault */
 .word   Default_Handler             /* UsageFault */

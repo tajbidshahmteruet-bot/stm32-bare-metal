@@ -57,7 +57,17 @@ void adc_init(uint8_t channel) {
 }
 
 uint32_t adc_read(void) {
+    // Clear any pending flags
+    ADC1->ISR |= ADC_ISR_EOC | ADC_ISR_EOS | ADC_ISR_OVR;
+
+    // Start conversion
     ADC1->CR |= ADC_CR_ADSTART;
-    while (!(ADC1->ISR & ADC_ISR_EOC));
+
+    // Wait with timeout
+    uint32_t timeout = 100000;
+    while (!(ADC1->ISR & ADC_ISR_EOC)) {
+        if (--timeout == 0) return 0;
+    }
+
     return ADC1->DR;
 }
