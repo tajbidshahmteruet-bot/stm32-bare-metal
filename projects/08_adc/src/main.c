@@ -4,12 +4,16 @@
 #include "systick.h"
 #include "usart3.h"
 #include "adc.h"
-#include "lr_model.h"
+#include "nn_model.h"
 
 #define WINDOW_SIZE     100
 #define WINDOW_DELAY_MS 1
 
 void EXTI15_10_IRQHandler(void) { while(1); }
+void HardFault_Handler(void) {
+    printf("HARDFAULT!\r\n");
+    while(1);
+}
 
 void compute_features(uint32_t *out_range, uint32_t *out_std) {
     static uint32_t samples[WINDOW_SIZE];
@@ -33,7 +37,6 @@ void compute_features(uint32_t *out_range, uint32_t *out_std) {
     }
     variance /= WINDOW_SIZE;
 
-    // Integer square root
     uint32_t std = 0;
     if (variance > 0) {
         uint64_t s = variance;
@@ -46,39 +49,55 @@ void compute_features(uint32_t *out_range, uint32_t *out_std) {
     *out_std   = std;
 }
 
-uint8_t lr_predict(uint32_t range, uint32_t std) {
-    float f0 = ((float)range - LR_MEAN0) / LR_STD0;
-    float f2 = ((float)std   - LR_MEAN2) / LR_STD2;
-    float z  = LR_W0 * f0 + LR_W2 * f2 + LR_BIAS;
-    return (z >= 0.0f) ? 1 : 0;
+float relu(float x) {
+    return x > 0.0f ? x : 0.0f;
 }
-void HardFault_Handler(void) {
-    // Read fault status registers
-    uint32_t hfsr = SCB->HFSR;
-    uint32_t cfsr = SCB->CFSR;
-    uint32_t mmfar = SCB->MMFAR;
-    uint32_t bfar  = SCB->BFAR;
-    printf("HARDFAULT!\r\n");
-    printf("HFSR: 0x%08lx\r\n", hfsr);
-    printf("CFSR: 0x%08lx\r\n", cfsr);
-    printf("MMFAR: 0x%08lx\r\n", mmfar);
-    printf("BFAR:  0x%08lx\r\n", bfar);
-    while(1);
+
+float sigmoid(float x) {
+    // Clamp to avoid overflow
+    if (x >  6.0f) return 1.0f;
+    if (x < -6.0f) return 0.0f;
+    // Approximation using Taylor series
+    float ex = 1.0f + x + x*x*0.5f + x*x*x*0.1667f +
+               x*x*x*x*0.0417f + x*x*x*x*x*0.0083f;
+    return ex / (1.0f + ex);
+}
+
+uint8_t nn_predict(uint32_t range, uint32_t std) {
+    // Normalize inputs
+    float x0 = ((float)range - NN_MEAN0) / NN_STD0;
+    float x1 = ((float)std   - NN_MEAN1) / NN_STD1;
+
+    // Hidden layer: 8 neurons with ReLU
+    float h[8];
+    for (int j = 0; j < 8; j++) {
+        h[j] = relu(NN_W1[0][j] * x0 + NN_W1[1][j] * x1 + NN_B1[j]);
+    }
+
+    // Output layer: 1 neuron with sigmoid
+    float z = NN_B2;
+    for (int j = 0; j < 8; j++) {
+        z += NN_W2[j] * h[j];
+    }
+
+    float prob = sigmoid(z);
+    return (prob >= 0.5f) ? 1 : 0;
 }
 
 int main(void) {
-    // Enable FPU — set CP10 and CP11 to full access
+    // Enable FPU
     SCB->CPACR |= (0xFU << 20);
+
     systick_init();
     usart3_init();
     printf("Boot OK\r\n");
     adc_init(15);
-    printf("=== LR Anomaly Detector ===\r\n");
+    printf("=== NN Anomaly Detector ===\r\n");
 
     while (1) {
         uint32_t range, std;
         compute_features(&range, &std);
-        uint8_t result = lr_predict(range, std);
+        uint8_t result = nn_predict(range, std);
 
         if (result == 1) {
             printf("ANOMALY  range=%lu std=%lu\r\n", range, std);
@@ -87,3 +106,4 @@ int main(void) {
         }
     }
 }
+
